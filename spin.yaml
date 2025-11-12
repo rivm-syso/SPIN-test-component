@@ -1,0 +1,51 @@
+components:
+  - title: Interactive Bar Chart
+    type: Bar Chart
+    introduction: A responsive bar chart component for visualizing categorical data with customizable colors and animations.
+    variants:
+      - programming_language: Python
+        library: Plotly
+        demo_url: https://example.com/demos/plotly-bar-chart
+        demo_code_snippet: |
+          import plotly.graph_objects as go
+          
+          fig = go.Figure(data=[
+              go.Bar(name='Sales', x=['Q1', 'Q2', 'Q3', 'Q4'], y=[20, 14, 25, 30])
+          ])
+          fig.update_layout(title='Quarterly Sales')
+          fig.show()
+        install_commands: pip install plotly
+        dependencies: pandas>=1.3.0, numpy>=1.21.0
+        extra_docs: https://plotly.com/python/bar-charts/
+      - programming_language: JavaScript
+        library: ECharts
+        demo_url: https://example.com/demos/chartjs-bar
+        demo_code_snippet: |
+          const ctx = document.getElementById('myChart');
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+              datasets: [{
+                label: 'Sales',
+                data: [20, 14, 25, 30]
+              }]
+            }
+          });
+        install_commands: npm install chart.js
+        dependencies: chart.js>=4.0.0
+      - programming_language: JavaScript
+        library: ggplot2
+        demo_url: https://example.com/demos/recharts-bar
+        demo_code_snippet: |
+          import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+          
+          const data = [
+            { name: 'Q1', sales: 20 },
+            { name: 'Q2', sales: 14 }
+          ];
+          
+          <BarChart data={data}>
+            <Bar dataKey="sales" />
+          </BarChart>
+        install_commands: npm install recharts
