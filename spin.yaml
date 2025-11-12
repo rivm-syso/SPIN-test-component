@@ -1,51 +1,60 @@
 components:
-  - title: Interactive Bar Chart
+  - title: Bar Chart (static)
     type: Bar Chart
-    introduction: A responsive bar chart component for visualizing categorical data with customizable colors and animations.
+    introduction: Een staafdiagram gebruik je om verschillen tussen twee of meerdere groepen te visualiseren.
     variants:
-      - programming_language: Python
-        library: Plotly
-        demo_url: https://example.com/demos/plotly-bar-chart
-        demo_code_snippet: |
-          import plotly.graph_objects as go
-          
-          fig = go.Figure(data=[
-              go.Bar(name='Sales', x=['Q1', 'Q2', 'Q3', 'Q4'], y=[20, 14, 25, 30])
-          ])
-          fig.update_layout(title='Quarterly Sales')
-          fig.show()
-        install_commands: pip install plotly
-        dependencies: pandas>=1.3.0, numpy>=1.21.0
-        extra_docs: https://plotly.com/python/bar-charts/
-      - programming_language: JavaScript
-        library: ECharts
-        demo_url: https://example.com/demos/chartjs-bar
-        demo_code_snippet: |
-          const ctx = document.getElementById('myChart');
-          new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-              datasets: [{
-                label: 'Sales',
-                data: [20, 14, 25, 30]
-              }]
-            }
-          });
-        install_commands: npm install chart.js
-        dependencies: chart.js>=4.0.0
-      - programming_language: JavaScript
+      - programming_language: R
         library: ggplot2
-        demo_url: https://example.com/demos/recharts-bar
+        demo_url: https://iili.io/KpwhSzx.png
         demo_code_snippet: |
-          import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+          dat_open <- read_delim("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv",
+                                 delim = ";")
           
-          const data = [
-            { name: 'Q1', sales: 20 },
-            { name: 'Q2', sales: 14 }
-          ];
+          tab_cases_gender <- dat_open |>
+            filter(!Sex == "Unknown") |>
+            count(Sex)
           
-          <BarChart data={data}>
-            <Bar dataKey="sales" />
-          </BarChart>
-        install_commands: npm install recharts
+          fig_cases_gender <- tab_cases_gender |>
+
+            # create basic ggplot object
+            ggplot(aes(
+              x = Sex,
+              y = n
+            )) +
+            geom_col(
+              fill = "#007BC7",  # generic color
+              width = 0.6
+            ) +
+
+            # title and axes titles
+            labs(
+              title = "COVID-19 cases per gender",
+              x = "Sex",
+              y = "Number of cases"
+            ) +
+
+            # customize y-axis
+            scale_y_continuous(
+              # decrease gap between x-axis and plot area (but keep padding on top)
+              expand = expansion(mult = c(0, .1)),
+              # ensure scientific notation is not used
+              labels = comma
+            ) +
+
+            # generic theme
+            theme_minimal(base_size = 12) +
+            theme(
+              plot.title = element_text(face = "bold"),
+              axis.title = element_text(face = "bold"),
+              panel.grid.major.x = element_blank(),
+              panel.grid.minor = element_blank()
+            )
+        install_commands: |
+          install.packages("tidyverse")
+          install.packages("scales")
+        dependencies: |
+          library(tidyverse)
+          library(scales)
+        extra_docs: |
+          - Het is niet aan te raden om een staafdiagram te gebruiken voor continue data, data met veel verschillende categorieën, of trends over tijd.
+          - We gebruiken een publieke COVID-dataset als voorbeeld. Het is een databestand met positieve SARS-CoV-2 gevallen, gestratificeerd naar leeftijd, geslacht en provincie.
