@@ -3,9 +3,9 @@ components:
     type: Bar Chart
     introduction: Een staafdiagram gebruik je om verschillen tussen twee of meerdere groepen te visualiseren.
     variants:
-      - entrypoint: "Rscript myscript"
-      - rel_path: "."
       - programming_language: R
+        entrypoint: "Rscript myscript"
+        rel_path: "."
         library: ggplot2
         demo_url: https://iili.io/KpwhSzx.png
         demo_code_snippet: |
