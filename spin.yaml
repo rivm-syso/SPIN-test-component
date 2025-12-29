@@ -1,62 +1,79 @@
+name: Componenten R and Shiny
+programming_language_slug: r-and-shiny
+type: components
+
+# Content for SPIN V2
 components:
-  - title: Bar Chart (static)
-    type: Bar Chart
-    introduction: Een staafdiagram gebruik je om verschillen tussen twee of meerdere groepen te visualiseren.
-    variants:
-      - programming_language: R
-        entrypoint: "Rscript myscript"
-        rel_path: "."
-        library: ggplot2
-        demo_url: https://iili.io/KpwhSzx.png
-        demo_code_snippet: |
-          dat_open <- read_delim("https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv",
-                                 delim = ";")
-          
-          tab_cases_gender <- dat_open |>
-            filter(!Sex == "Unknown") |>
-            count(Sex)
-          
-          fig_cases_gender <- tab_cases_gender |>
+  - name: Button
+    category: Button
+    programming_language: R
+    library: Shiny
+    demo_url: https://spin-diamond.rivm.ota-int.containerhostingplatform.nl/componenten/buttons/button/
+    demo_code_snippet: |
+      library(shiny)
 
-            # create basic ggplot object
-            ggplot(aes(
-              x = Sex,
-              y = n
-            )) +
-            geom_col(
-              fill = "#007BC7",  # generic color
-              width = 0.6
-            ) +
+      ui <- fluidPage(
+        # Add styling to the button. Move this to CSS file when using code.
+        tags$head(
+          tags$style(HTML("
+          .custom-button-style {
+            background-color: #007bc7;
+            border: none;
+            color: white;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+          }
+          .custom-button-style:hover {
+            background-color: #005b94;
+            color:white;
+          }
+          .custom-button-style.active {
+            background-color: #8cc3e6;
+            color:white;
+            }")
+          ),
 
-            # title and axes titles
-            labs(
-              title = "COVID-19 cases per gender",
-              x = "Sex",
-              y = "Number of cases"
-            ) +
+          # Define the button
+          actionButton(
+            inputId = "my_favorite_button",
+            label = "Bereken",
+            icon = icon("calculator"),
+            width = "50%",
+            class = "custom-button-style",
+            `aria-label` = "Favoriete knop"
+          ),
 
-            # customize y-axis
-            scale_y_continuous(
-              # decrease gap between x-axis and plot area (but keep padding on top)
-              expand = expansion(mult = c(0, .1)),
-              # ensure scientific notation is not used
-              labels = comma
-            ) +
+          # Create an output element to display the button counter.
+          # Code is not necessary for the button to function!
+          textOutput("button_counter")
+        )
+      )
+      server <- function(input, output) {
+        # Code is added to display the button counter.
+        # Adjust or remove this code depending on your own use-case
+        button_clicks <- reactive(input$my_favorite_button)
+        output$button_counter <- renderText(paste0("U heeft de knop ",
+                                                   button_clicks(), " keer ingedrukt"))
+      }
 
-            # generic theme
-            theme_minimal(base_size = 12) +
-            theme(
-              plot.title = element_text(face = "bold"),
-              axis.title = element_text(face = "bold"),
-              panel.grid.major.x = element_blank(),
-              panel.grid.minor = element_blank()
-            )
-        install_commands: |
-          install.packages("tidyverse")
-          install.packages("scales")
-        dependencies: |
-          library(tidyverse)
-          library(scales)
-        extra_docs: |
-          - Het is niet aan te raden om een staafdiagram te gebruiken voor continue data, data met veel verschillende categorieën, of trends over tijd.
-          - We gebruiken een publieke COVID-dataset als voorbeeld. Het is een databestand met positieve SARS-CoV-2 gevallen, gestratificeerd naar leeftijd, geslacht en provincie.
+      shinyApp(ui, server)
+    install_commands: |
+      install.packages("shiny")
+    dependencies: |
+      library(shiny)
+    extra_docs: |
+      - Voor meer informatie over de actionButton zie [shiny - actionButton](https://shiny.posit.co/r/reference/shiny/latest/actionbutton.html)
+      - De huidige actionButton() is gestyled met een style tag in de UI om hem bruikbaar te maken met een rijkshuisstijl CSS file.
+      Het wordt aangeraden de class definitie uit de UI te halen en in een override.css file te zetten in de folder waar je css files opgeslagen staan.
+      De style tag kan dan worden verwijderd en de class can nog steeds gebruikt worden zoals in het voorbeeld, mits je de override.css file linkt in de UI.
+      Gebruik hiervoor de volgende code:
+      <div style="color: black; background: transparent;">
+      ```
+      tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "path/to/css/override.css"))
+      ```
