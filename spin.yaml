@@ -6,7 +6,7 @@ type: components
 components:
   - name: Button2
     category: Button
-    programming_language: S
+    programming_language: R
     library: Shiny
     demo_url: https://spin-diamond.rivm.ota-int.containerhostingplatform.nl/componenten/buttons/button/
     demo_code_snippet: |
