@@ -4,9 +4,9 @@ type: components
 
 # Content for SPIN V2
 components:
-  - name: Button
+  - name: Button2
     category: Button
-    programming_language: R
+    programming_language: S
     library: Shiny
     demo_url: https://spin-diamond.rivm.ota-int.containerhostingplatform.nl/componenten/buttons/button/
     demo_code_snippet: |
